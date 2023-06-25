@@ -2,15 +2,15 @@
 #include "pch.hpp"
 #include "window.hpp"
 
+inline auto RendererDestroy = [](SDL_Renderer* renderer) {
+    SDL_DestroyRenderer(renderer);
+};
+
 class Renderer final {
 public:
     friend struct Context;
 
     Renderer(const Window&);
-    ~Renderer();
-    Renderer(const Renderer&) = delete;
-    Renderer(Renderer&&);
-    Renderer& operator=(const Renderer&) = delete;
 
     void SetColor(const SDL_Color&);
     void Clear();
@@ -21,5 +21,5 @@ public:
     void DrawTexture(SDL_Texture*, const SDL_Rect&, int x, int y);
 
 private:
-    SDL_Renderer* renderer_;
+    std::unique_ptr<SDL_Renderer, decltype(RendererDestroy)> renderer_;
 };

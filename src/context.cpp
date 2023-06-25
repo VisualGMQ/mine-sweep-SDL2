@@ -86,11 +86,11 @@ SDL_Texture* loadTexture(SDL_Renderer* renderer, const std::string& bmpFilename,
 }
 
 Context::Context(Window&& window, Renderer&& renderer, Map&& map, int mineCount)
-    : numberImage(loadTexture(renderer.renderer_, "resources/font.bmp", KeyColor), TextureDestroy),
-      mineImage(loadTexture(renderer.renderer_,"resources/mine.bmp", KeyColor), TextureDestroy),
-      flagImage(loadTexture(renderer.renderer_,"resources/flag.bmp", KeyColor), TextureDestroy),
-      gameoverImage(loadTexture(renderer.renderer_,"resources/gameover.bmp", KeyColor), TextureDestroy),
-      winImage(loadTexture(renderer.renderer_,"resources/win.bmp", KeyColor), TextureDestroy),
+    : numberImage(loadTexture(renderer.renderer_.get(), "resources/font.bmp", KeyColor), TextureDestroy),
+      mineImage(loadTexture(renderer.renderer_.get(),"resources/mine.bmp", KeyColor), TextureDestroy),
+      flagImage(loadTexture(renderer.renderer_.get(),"resources/flag.bmp", KeyColor), TextureDestroy),
+      gameoverImage(loadTexture(renderer.renderer_.get(),"resources/gameover.bmp", KeyColor), TextureDestroy),
+      winImage(loadTexture(renderer.renderer_.get(),"resources/win.bmp", KeyColor), TextureDestroy),
       window(std::move(window)),
       renderer(std::move(renderer)),
       map(std::move(map)),
