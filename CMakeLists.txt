@@ -7,7 +7,9 @@ project(
 )
 
 include(cmake/utility.cmake)
-include(cmake/FindSDL2.cmake)
+if (NOT EMSCRIPTEN)
+    include(cmake/FindSDL2.cmake)
+endif()
 include(cmake/copydll.cmake)
 
 IsMSVCBackend(is_msvc_backend)
@@ -20,6 +22,18 @@ target_compile_features(mine-sweep PRIVATE cxx_std_17)
 
 if (${is_msvc_backend})
     target_link_options(mine-sweep PRIVATE $<IF:$<CONFIG:Release>,/SUBSYSTEM:WINDOWS,/SUBSYSTEM:CONSOLE>)
+endif()
+
+if (EMSCRIPTEN)
+    message("-- build for wasm")
+    CopyResForWASM(mine-sweep)    # NOTE: em++ work under ${CMAKE_BINARY_DIR}, so we copy resources dir to there for resources path correctly
+    set(USE_SDL "-sUSE_SDL=2" )
+    set(PRELOAD "--preload-file resources --use-preload-plugins")
+    set(OTHER_FLAGS "-s WASM=1 -s ALLOW_MEMORY_GROWTH=1")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${USE_SDL}")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${USE_SDL}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${USE_SDL} ${PRELOAD} ${OTHER_FLAGS}")
+    set(CMAKE_EXECUTABLE_SUFFIX .html)
 endif()
 
 CopyDLL(mine-sweep)

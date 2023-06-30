@@ -46,6 +46,8 @@ struct Context final {
     bool debugMode = false;
     int nakkedCount = 0;
     int mineCount = 0;
+    SDL_Event event;
+    bool shouldClose = false;
 
     static void Init() {
         if (!instance_) {

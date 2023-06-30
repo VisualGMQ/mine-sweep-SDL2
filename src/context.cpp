@@ -79,8 +79,14 @@ Map CreateRandomMap(int bombCount, int w, int h) {
 
 SDL_Texture* loadTexture(SDL_Renderer* renderer, const std::string& bmpFilename, const SDL_Color& keycolor) {
     SDL_Surface* surface = SDL_LoadBMP(bmpFilename.c_str());
+    if (!surface) {
+        SDL_LogError(SDL_LOG_CATEGORY_RESERVED1, "%s load failed", bmpFilename.c_str());
+    }
     SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, keycolor.r, keycolor.g, keycolor.b));
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (!texture) {
+        SDL_LogError(SDL_LOG_CATEGORY_RESERVED1, "texture create from %s failed", bmpFilename.c_str());
+    }
     SDL_FreeSurface(surface);
     return texture;
 }
