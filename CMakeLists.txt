@@ -44,3 +44,6 @@ install(DIRECTORY resources
 DESTINATION "${CMAKE_BINARY_DIR}/mine-sweep-${PROJECT_VERSION}")
 install(FILES $CACHE{SDL2_DYNAMIC_LIB_DIR}/SDL2.dll
 DESTINATION "${CMAKE_BINARY_DIR}/mine-sweep-${PROJECT_VERSION}")
+
+file(GLOB allCopyFiles  "resources/*")
+file(COPY ${allCopyFiles} DESTINATION resources)
